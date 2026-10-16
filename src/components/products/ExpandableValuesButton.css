@@ -1,0 +1,36 @@
+/* Botón "Ver todos" que se expande en el modal (Motion) */
+
+/* Motion controla la entrada/salida: se anulan las animaciones CSS del modal */
+.evb-backdrop,
+.evb-panel {
+  animation: none !important;
+}
+
+.evb-panel {
+  position: relative;
+}
+
+/* Texto del botón mientras el panel está en forma de botón */
+.evb-label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.evb-content {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  flex: 1;
+  overflow: hidden;
+}

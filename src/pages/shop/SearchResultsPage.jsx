@@ -5,9 +5,12 @@ import ProductGrid from "../../components/products/ProductGrid";
 import SearchFilters from "../../components/products/SearchFilters";
 import "../../components/products/SearchFilters.css";
 import { SkeletonGrid } from "../../components/shared/SkeletonCard";
+import productsService from "../../services/products.service";
+import nivelesService from "../../services/niveles.service";
 import "../styles/SearchResultsPage.css";
 
 const DEFAULT_FILTERS = { brand: "all", category: "all", maxPrice: null };
+const WHATSAPP_NUMBER = "593999601748";
 
 const applyFilters = (products, filters) => {
   return products.filter((p) => {
@@ -18,33 +21,64 @@ const applyFilters = (products, filters) => {
   });
 };
 
+// Quita productos repetidos (un producto puede venir en dos búsquedas de aro)
+const sinRepetidos = (lista) => {
+  const vistos = new Set();
+  return lista.filter((p) => (vistos.has(p.id) ? false : vistos.add(p.id)));
+};
+
+/**
+ * Alternativas cuando no hay coincidencia exacta:
+ * 1. Productos del mismo aro y del siguiente aro creado en el admin (ej: 185/60R14 → aro 14 y 15).
+ * 2. Si tampoco hay, todo el catálogo.
+ */
+const buscarAlternativas = async (medida) => {
+  const aro = Number(medida?.rin);
+  if (Number.isFinite(aro) && aro > 0) {
+    const aros = await nivelesService.listarValoresMedida("aros").catch(() => []);
+    const siguiente = aros.find((v) => v > aro) ?? aro + 1;
+    const [mismoAro, aroSiguiente] = await Promise.all([
+      productsService.searchByMeasure({ rin: aro }).catch(() => []),
+      productsService.searchByMeasure({ rin: siguiente }).catch(() => []),
+    ]);
+    const porAro = sinRepetidos([...mismoAro, ...aroSiguiente]);
+    if (porAro.length > 0) {
+      return { productos: porAro, titulo: `Otras opciones en aro ${aro} y ${siguiente}` };
+    }
+  }
+  const todos = await productsService.getAllProducts().catch(() => []);
+  return { productos: todos, titulo: "Todos nuestros productos" };
+};
+
 const SearchResultsPage = () => {
   const [searchParams] = useSearchParams();
   const query = searchParams.get("q") || "";
-  
+
   const { loading, buscarGeneral } = useProducts();
   const [resultados, setResultados] = useState([]);
-  const [recomendaciones, setRecomendaciones] = useState([]);
+  const [alternativas, setAlternativas] = useState({ productos: [], titulo: "" });
   const [hasSearched, setHasSearched] = useState(false);
   const [filters, setFilters] = useState(DEFAULT_FILTERS);
 
   useEffect(() => {
     let isMounted = true;
-    
+
     const fetchResults = async () => {
       if (!query) {
         setResultados([]);
-        setRecomendaciones([]);
+        setAlternativas({ productos: [], titulo: "" });
         setHasSearched(true);
         return;
       }
 
       setHasSearched(false);
       const data = await buscarGeneral(query);
-      
+      const encontrados = data?.resultados || [];
+      const extra = encontrados.length === 0 ? await buscarAlternativas(data?.parsedMedida) : { productos: [], titulo: "" };
+
       if (isMounted) {
-        setResultados(data?.resultados || []);
-        setRecomendaciones(data?.recomendaciones || []);
+        setResultados(encontrados);
+        setAlternativas(extra);
         setHasSearched(true);
         setFilters(DEFAULT_FILTERS);
       }
@@ -62,13 +96,17 @@ const SearchResultsPage = () => {
     [resultados, filters]
   );
 
+  const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
+    `Hola, quiero cotizar: ${query}`
+  )}`;
+
   return (
     <div className="search-results-page">
       <div className="search-results-header">
         <h1>Búsqueda: <span>{query ? `"${query}"` : "Todos los productos"}</span></h1>
       </div>
 
-      {loading && !hasSearched ? (
+      {(loading || !hasSearched) ? (
         <SkeletonGrid count={8} />
       ) : (
         <>
@@ -83,9 +121,18 @@ const SearchResultsPage = () => {
                 </p>
               ) : (
                 <div className="no-results-banner">
-                  <span className="no-results-icon">🔍</span>
-                  <p><strong>No hay en existencia</strong> un producto que coincida exactamente con "{query}".</p>
-                  <p className="no-results-sub">Pero no te preocupes, revisa nuestras recomendaciones a continuación.</p>
+                  <p><strong>Producto no disponible por el momento</strong></p>
+                  <p className="no-results-sub">
+                    No tenemos "{query}" en existencia, pero podemos conseguirlo para ti.
+                  </p>
+                  <a
+                    href={whatsappUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="no-results-whatsapp"
+                  >
+                    Cotiza por WhatsApp
+                  </a>
                 </div>
               )}
             </div>
@@ -107,13 +154,12 @@ const SearchResultsPage = () => {
             )}
           </div>
 
-          {recomendaciones.length > 0 && (
+          {alternativas.productos.length > 0 && (
             <div className="search-section recommendations-section">
               <div className="recommendations-header">
-                <h2>Sugerencias y Recomendaciones</h2>
-                <p>Productos con el mismo aro, en oferta o relacionados a tu búsqueda</p>
+                <h2>{alternativas.titulo}</h2>
               </div>
-              <ProductGrid products={recomendaciones} />
+              <ProductGrid products={alternativas.productos} />
             </div>
           )}
         </>

@@ -13,7 +13,7 @@ const MainSearchBox = ({ activeVehicle, onVehicleChange }) => {
   ];
 
   return (
-    <div className="relative rounded-2xl overflow-hidden h-full" style={{ background: "rgba(17, 24, 39, 0.70)" }}>
+    <div className="relative rounded-none border border-white/10 overflow-hidden h-full font-sans flex flex-col" style={{ background: "rgba(17, 24, 39, 0.70)" }}>
 
         {/* Blob izquierdo de color */}
         <div
@@ -37,9 +37,9 @@ const MainSearchBox = ({ activeVehicle, onVehicleChange }) => {
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-white/10" />
 
         {/* Tabs de vehículos */}
-        <div className="p-2 pb-0">
+        <div className="p-2 pb-0 shrink-0">
           <div className="flex items-center mb-1.5">
-            <span className="text-white/70 text-[9px] font-bold uppercase tracking-wider ml-1">
+            <span className="text-white/80 text-[9px] font-bold uppercase tracking-widest ml-1 font-display">
               ESCOGE EL TIPO DE VEHÍCULO:
             </span>
           </div>
@@ -48,8 +48,8 @@ const MainSearchBox = ({ activeVehicle, onVehicleChange }) => {
               <button
                 key={vehicle.id}
                 onClick={() => onVehicleChange(vehicle.id)}
-                className={`flex items-center justify-center p-1.5 rounded-xl transition-all border-2 focus:outline-none ${activeVehicle === vehicle.id
-                  ? "shadow-md scale-[1.02]"
+                className={`flex items-center justify-center p-1.5 rounded-none transition-all border font-display focus:outline-none ${activeVehicle === vehicle.id
+                  ? "shadow-sm"
                   : "bg-transparent border-white/20 hover:border-white/40"
                   }`}
                 style={{
@@ -65,19 +65,19 @@ const MainSearchBox = ({ activeVehicle, onVehicleChange }) => {
           </div>
         </div>
 
-        {/* Contenido principal */}
-        {/* Contenido principal */}
-        <div className="p-2">
+        {/* Contenido principal — crece para llenar el alto disponible, así
+            la tarjeta blanca baja hasta el borde y no deja espacio gris */}
+        <div className="p-2 flex-1 flex flex-col min-h-0">
           {/* Botones de modo de búsqueda */}
-          <div className="flex flex-wrap items-center gap-2 p-2 bg-white/10 rounded-xl mb-2">
-            <span className="text-white/60 text-[9px] font-bold uppercase tracking-widest ml-2">
+          <div className="flex flex-wrap items-center gap-2 p-2 bg-white/10 rounded-none border border-white/10 mb-2 shrink-0">
+            <span className="text-white/70 text-[9px] font-bold uppercase tracking-widest ml-2 font-display">
               BUSCA TU LLANTA IDEAL POR:
             </span>
             <div className="flex flex-wrap gap-2">
               <button
                 onClick={() => setSearchMode("dimension")}
-                className={`px-2.5 py-1 rounded-full text-[10px] font-semibold transition-all focus:outline-none ${searchMode === "dimension"
-                  ? "text-white shadow-md"
+                className={`px-3 py-1 rounded-none text-[10px] font-bold tracking-wider font-display transition-all focus:outline-none ${searchMode === "dimension"
+                  ? "text-white shadow-sm"
                   : "bg-white/10 text-gray-300 hover:bg-white/20"
                   }`}
                 style={{
@@ -89,8 +89,8 @@ const MainSearchBox = ({ activeVehicle, onVehicleChange }) => {
 
               <button
                 onClick={() => setSearchMode("vehiculo")}
-                className={`px-2.5 py-1 rounded-full text-[10px] font-semibold transition-all focus:outline-none ${searchMode === "vehiculo"
-                  ? "text-white shadow-md"
+                className={`px-3 py-1 rounded-none text-[10px] font-bold tracking-wider font-display transition-all focus:outline-none ${searchMode === "vehiculo"
+                  ? "text-white shadow-sm"
                   : "bg-white/10 text-gray-300 hover:bg-white/20"
                   }`}
                 style={{
@@ -102,8 +102,11 @@ const MainSearchBox = ({ activeVehicle, onVehicleChange }) => {
             </div>
           </div>
 
-          {/* Área de contenido principal */}
-          <div className="bg-white rounded-xl p-2 shadow-inner" style={{ position: 'relative', zIndex: 10 }}>
+          {/* Área de contenido principal — flex-1 para que baje hasta el fondo */}
+          <div
+            className="bg-white rounded-none p-2 shadow-inner border border-gray-200 flex-1 flex flex-col justify-center min-h-0"
+            style={{ position: 'relative', zIndex: 10 }}
+          >
             {searchMode === "dimension" ? (
               <TireSearcher />
             ) : (

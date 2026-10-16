@@ -1,14 +1,15 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+/* Fuentes cargadas en index.html (Inter + Space Grotesk via Google Fonts) */
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
-@import "@fontsource-variable/geist";
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: 'Inter', sans-serif;
+  --font-sans: 'Inter', sans-serif;
+  --font-display: 'Space Grotesk', sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -84,8 +85,7 @@ button.btn-primary-action:focus-visible {
 
 @layer base {
   .theme {
-    --font-heading: var(--font-sans);
-    --font-sans: 'Geist Variable', sans-serif;
+    --font-sans: 'Inter', sans-serif;
   }
   :root {
     --background: oklch(1 0 0);
@@ -159,4 +159,12 @@ button.btn-primary-action:focus-visible {
   html {
     @apply font-sans;
   }
+}
+
+/* Mapa (Leaflet): su CSS trae Helvetica/Arial/Tahoma/Lucida; se fuerza la tipografía del sitio */
+.leaflet-container,
+.leaflet-container a.leaflet-popup-close-button,
+.leaflet-control-zoom-in,
+.leaflet-control-zoom-out {
+  font-family: 'Inter', sans-serif;
 }

@@ -3,7 +3,6 @@ import { AlertTriangle, Globe, Layers, Copy, Check, ExternalLink, X } from "luci
 import nivelesService, { mensajeError } from "@/services/niveles.service";
 import {
   AccionesTarjeta,
-  Aviso,
   Campo,
   CampoImagen,
   EncabezadoSeccion,
@@ -92,14 +91,12 @@ export function MarcasPanel({ marcas, tipos, recargar, notificar }) {
         ...form,
         idTipoProducto: Number(form.idTipoProducto),
         nombre: form.nombre.trim(),
-        ...(requiereImagenes && {
-          logoUrl: logo.url,
-          bannerUrl: banner.url,
-          quitarLogo: logo.quitar || undefined,
-          quitarBanner: banner.quitar || undefined,
-        }),
+        logoUrl: logo.url,
+        bannerUrl: banner.url,
+        quitarLogo: logo.quitar || undefined,
+        quitarBanner: banner.quitar || undefined,
       };
-      const archivos = requiereImagenes ? { logo: logo.archivo, banner: banner.archivo } : {};
+      const archivos = { logo: logo.archivo, banner: banner.archivo };
       if (editando) await nivelesService.actualizarMarca(editando.idMarca, payload, archivos);
       else await nivelesService.crearMarca(payload, archivos);
       setModal((m) => ({ ...m, abierto: false }));
@@ -127,7 +124,7 @@ export function MarcasPanel({ marcas, tipos, recargar, notificar }) {
     <div className="space-y-4">
       <EncabezadoSeccion
         titulo="Marcas"
-        descripcion="Cada marca pertenece a un tipo de producto. En Llantas el logo y el banner son obligatorios (se muestran en el card)."
+        descripcion="Todas las marcas pueden tener logo y banner. En Llantas son obligatorios; en los demás tipos son opcionales."
         textoBoton="Agregar Marca"
         onNuevo={() => abrir()}
       >
@@ -249,28 +246,24 @@ export function MarcasPanel({ marcas, tipos, recargar, notificar }) {
           />
         </Campo>
 
-        {requiereImagenes ? (
+        {tipoSeleccionado && (
           <>
             <CampoImagen
               etiqueta="Logo de la marca"
-              requerido
+              requerido={requiereImagenes}
               ayuda="Se muestra en la parte superior del card del producto"
               urlActual={modal.editando?.logoUrl}
               onChange={setLogo}
             />
             <CampoImagen
               etiqueta="Banner de la marca"
-              requerido
+              requerido={requiereImagenes}
               ayuda="Imagen ancha para la sección de la marca (ej: 1200×300)"
               urlActual={modal.editando?.bannerUrl}
               onChange={setBanner}
               alto="h-10"
             />
           </>
-        ) : (
-          modal.form.idTipoProducto && (
-            <Aviso>Para {tipoSeleccionado?.nombre} la marca se crea solo con el nombre (logo y banner no aplican).</Aviso>
-          )
         )}
 
         <Campo etiqueta="País de origen">

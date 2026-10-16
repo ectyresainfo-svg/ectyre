@@ -76,6 +76,16 @@ const nivelesService = {
   eliminarTipoUso: (id) => api.delete(`/catalogos/tipos-uso/${id}`).then(datos),
 
   // ─── Medidas: tipo = anchos | altos | aros ─────────────────
+  // Lista pública (solo activas); devuelve los valores numéricos ordenados
+  listarValoresMedida: (tipo) =>
+    api
+      .get(`/catalogos/medidas/${tipo}`)
+      .then(datos)
+      .then((lista) =>
+        [...new Set((lista || []).map((m) => Number(m.valor)).filter((v) => Number.isFinite(v) && v > 0))].sort(
+          (a, b) => a - b
+        )
+      ),
   crearMedida: (tipo, valor) => api.post(`/catalogos/medidas/${tipo}`, { valor }).then(datos),
   actualizarMedida: (tipo, id, data) => api.put(`/catalogos/medidas/${tipo}/${id}`, data).then(datos),
   eliminarMedida: (tipo, id) => api.delete(`/catalogos/medidas/${tipo}/${id}`).then(datos),

@@ -1,4 +1,5 @@
 import api from '../lib/api';
+import apiCache from '../utils/apiCache';
 
 /**
  * Servicio de administración.
@@ -85,6 +86,10 @@ const adminService = {
     const response = id
       ? await api.put(`/admin/productos/${id}`, formData, config)
       : await api.post('/admin/productos', formData, config);
+    // Al volver al catálogo, reflejar la selección de destacados recién guardada.
+    apiCache.invalidateByPrefix('all-products:');
+    apiCache.invalidate('featured-products');
+    if (id) apiCache.invalidate(`product:${id}`);
     return response.data;
   },
 

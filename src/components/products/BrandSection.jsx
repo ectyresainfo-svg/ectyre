@@ -12,7 +12,7 @@ const BrandSection = ({ brand, products }) => {
       <div className="brand-section-inner">
         {/* ── HEADER IZQUIERDO ── */}
         <div className="brand-section-header">
-          {(brand.logo || brand.banner) && (
+          {brand.logo || brand.banner ? (
             <div className="brand-logo-wrapper">
               <img
                 src={brand.logo || brand.banner}
@@ -25,10 +25,11 @@ const BrandSection = ({ brand, products }) => {
                 }}
               />
             </div>
+          ) : (
+            <h2 className="brand-section-title">{brand.name}</h2>
           )}
           <div className="brand-meta">
-            <h2 className="brand-section-title">{brand.name}</h2>
-            <p className="brand-section-tagline">{brand.tagline}</p>
+            {brand.tagline && <p className="brand-section-tagline">{brand.tagline}</p>}
             <Link to={`/brand/${(brand?.name || '').toLowerCase()}`} className="brand-see-all-btn">
               Ver todos →
             </Link>

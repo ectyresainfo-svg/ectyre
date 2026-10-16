@@ -16,6 +16,7 @@ const TireCard = ({
   specs,           // { wet: 0, dry: 0, noise: "109S" } (Opcional)
   show247 = true,
   pvp,
+  compact = false, // Versión reducida (ej: carrusel de ofertas del hero)
 }) => {
   const [qty, setQty] = useState(1);
 
@@ -80,6 +81,35 @@ const TireCard = ({
         product?.returns && "Devoluciones",
       ].filter(Boolean)
     : [];
+
+  // Tamaños según la variante (normal / compacta)
+  const sz = compact
+    ? {
+        pad: "px-2",
+        sash: "h-6",
+        logo: "h-5",
+        logoWrap: "pb-1 pt-2",
+        img: "mx-2 aspect-[16/10]",
+        imgPad: "p-1.5",
+        price: "text-lg",
+        name: "text-[11px] min-h-[2.6em]",
+        qty: "h-7 w-[62px]",
+        qtyBtn: "w-5",
+        btn: "h-7 flex-1 text-[10px]",
+      }
+    : {
+        pad: "px-3",
+        sash: "h-9",
+        logo: "h-8",
+        logoWrap: "pb-1.5 pt-3",
+        img: "mx-3 aspect-[4/3]",
+        imgPad: "p-3",
+        price: "text-2xl",
+        name: "text-xs min-h-[2.75em]",
+        qty: "h-8 w-[80px]",
+        qtyBtn: "w-6",
+        btn: "h-8 text-xs min-[440px]:text-[13px]",
+      };
 
   const terrainStyles = {
     AT: "bg-[#e8f0fe] text-[#1a3a8f] border-[#a8c0f0]",
@@ -170,13 +200,13 @@ const TireCard = ({
     <div className="tire-card flex w-full flex-col overflow-hidden rounded-xl border border-black/5 bg-white font-sans shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
       {/* --- SASH BANDA PROMOCIONAL (solo cuando existe banner real) --- */}
       {finalSash && (
-        <img src={finalSash} alt="Promoción" className="block h-9 w-full object-cover" loading="lazy" decoding="async" />
+        <img src={finalSash} alt="Promoción" className={`block ${sz.sash} w-full object-cover`} loading="lazy" decoding="async" />
       )}
 
       {/* --- BANNER / LOGO DE MARCA --- */}
-      <div className="flex justify-center px-3 pb-1.5 pt-3">
+      <div className={`flex justify-center ${sz.pad} ${sz.logoWrap}`}>
         {finalBrandDisplay ? (
-          <img src={finalBrandDisplay} alt={product?.brand || "Marca"} className="h-8 max-w-[90%] object-contain" loading="lazy" decoding="async" />
+          <img src={finalBrandDisplay} alt={product?.brand || "Marca"} className={`${sz.logo} max-w-[90%] object-contain`} loading="lazy" decoding="async" />
         ) : (
           <span className="text-[11px] font-black uppercase tracking-wide text-gray-500">
             {product?.brand || "MARCA C.A."}
@@ -187,7 +217,7 @@ const TireCard = ({
       {/* --- IMAGEN HERO + BADGES --- */}
       <Link
         to={`/product/${product?.id || "#"}`}
-        className="group relative mx-3 flex aspect-[4/3] items-center justify-center overflow-hidden rounded-lg bg-[#f7f8fa]"
+        className={`group relative ${sz.img} flex items-center justify-center overflow-hidden rounded-lg bg-white`}
         style={{ textDecoration: "none" }}
         title={`Ver detalles de ${name}`}
         target="_blank"
@@ -196,7 +226,7 @@ const TireCard = ({
         <img
           src={finalTireSrc}
           alt={name}
-          className="h-full w-full object-contain p-3 transition-transform duration-300 group-hover:scale-[1.04]"
+          className={`h-full w-full object-contain ${sz.imgPad} transition-transform duration-300 group-hover:scale-[1.04]`}
           loading="lazy"
           decoding="async"
           onError={(e) => { e.target.src = '/llanta1.png'; }}
@@ -230,10 +260,10 @@ const TireCard = ({
       </Link>
 
       {/* --- PRECIO --- */}
-      <div className="flex items-center justify-between px-3 pt-3">
+      <div className={`flex items-center justify-between ${sz.pad} ${compact ? "pt-2" : "pt-3"}`}>
         <div className="flex flex-col">
           <div className="flex items-baseline gap-0.5">
-            <span className="text-2xl font-bold leading-none text-[#e83a2b]">${int}</span>
+            <span className={`${sz.price} font-bold leading-none text-[#e83a2b]`}>${int}</span>
             <sup className="text-[11px] font-bold text-[#e83a2b]">.{dec}</sup>
             <span className="ml-0.5 text-[10px] font-medium text-gray-400">+ IVA</span>
           </div>
@@ -245,7 +275,7 @@ const TireCard = ({
             <span className="text-[10px] text-transparent select-none">.</span>
           )}
         </div>
-        {show247 && (
+        {show247 && !compact && (
           <img
             src="/1.png"
             alt="Promoción"
@@ -256,9 +286,9 @@ const TireCard = ({
       </div>
 
       {/* --- NOMBRE: siempre 2 líneas para uniformidad de altura --- */}
-      <div className="px-3 pt-1.5">
+      <div className={`${sz.pad} pt-1.5`}>
         <p
-          className="my-0 line-clamp-2 min-h-[2.75em] text-xs font-semibold leading-snug text-[#222]"
+          className={`my-0 line-clamp-2 ${sz.name} font-semibold leading-snug text-[#222]`}
           title={name}
         >
           {name}
@@ -271,8 +301,8 @@ const TireCard = ({
       </div>
 
       {/* --- SPECS COMPACTAS (se ocultan si el producto no tiene) --- */}
-      {specItems.length > 0 && (
-        <div className="flex items-center gap-3 px-3 pt-1.5">
+      {specItems.length > 0 && !compact && (
+        <div className={`flex items-center ${compact ? "gap-2" : "gap-3"} ${sz.pad} pt-1.5`}>
           {specItems.map((spec) => (
             <div key={spec.key} className="flex min-w-0 items-center gap-1" title={spec.title}>
               <span className={`flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full ${spec.iconBg}`}>
@@ -284,26 +314,26 @@ const TireCard = ({
         </div>
       )}
 
-      {perks.length > 0 && (
+      {perks.length > 0 && !compact && (
         <p className="my-0 px-3 pt-1 text-[10px] font-medium text-gray-400">{perks.join(" · ")}</p>
       )}
 
       {/* --- ACCIONES: botón alineado al fondo en todas las tarjetas --- */}
-      <div className="mt-auto flex items-center gap-2 px-3 pb-2 pt-1.5">
+      <div className={`mt-auto flex items-center ${compact ? "gap-1.5" : "gap-2"} ${sz.pad} pb-2 pt-1.5`}>
         {/* Selector de cantidad compacto */}
-        <div className="group flex h-8 w-[80px] shrink-0 items-center justify-between overflow-hidden rounded-[10px] border border-gray-200 bg-white transition-colors duration-200 hover:border-[#e83a2b] hover:bg-[#e83a2b]">
+        <div className={`group flex ${sz.qty} shrink-0 items-center justify-between overflow-hidden rounded-[10px] border border-gray-200 bg-white transition-colors duration-200 hover:border-[#e83a2b] hover:bg-[#e83a2b]`}>
           <button
             data-slot="stepper-btn"
-            className="flex h-full w-6 items-center justify-center border-none bg-transparent p-0 text-gray-400 transition-colors duration-200 group-hover:text-white"
+            className={`flex h-full ${sz.qtyBtn} items-center justify-center border-none bg-transparent p-0 text-gray-400 transition-colors duration-200 group-hover:text-white`}
             onClick={handleDecrement}
             aria-label="Disminuir cantidad"
           >
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M5 12h14" /></svg>
           </button>
-          <span className="min-w-[20px] text-center text-xs font-bold text-[#1a1a1a] transition-colors duration-200 group-hover:text-white">{qty}</span>
+          <span className="min-w-[14px] text-center text-xs font-bold text-[#1a1a1a] transition-colors duration-200 group-hover:text-white">{qty}</span>
           <button
             data-slot="stepper-btn"
-            className="flex h-full w-6 items-center justify-center border-none bg-transparent p-0 text-gray-400 transition-colors duration-200 group-hover:text-white"
+            className={`flex h-full ${sz.qtyBtn} items-center justify-center border-none bg-transparent p-0 text-gray-400 transition-colors duration-200 group-hover:text-white`}
             onClick={handleIncrement}
             aria-label="Aumentar cantidad"
           >
@@ -313,11 +343,11 @@ const TireCard = ({
         {/* Botón principal */}
         <button
           data-slot="action-btn"
-          className="flex h-8 flex-1 items-center justify-center gap-1 rounded-[10px] border-none bg-[#e83a2b] p-0 text-xs font-bold text-white transition-colors hover:bg-[#d0281b] active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-gray-300 min-[440px]:text-[13px]"
+          className={`flex ${sz.btn} flex-1 items-center justify-center gap-1 rounded-[10px] border-none bg-[#e83a2b] p-0 font-bold text-white transition-colors hover:bg-[#d0281b] active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-gray-300`}
           onClick={handleBuy}
           disabled={agotado}
         >
-          <svg className="hidden min-[440px]:block" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg className={compact ? "hidden" : "hidden min-[440px]:block"} width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <circle cx="9" cy="21" r="1" />
             <circle cx="20" cy="21" r="1" />
             <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />

@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import {
   SidebarProvider,
   SidebarInset,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
+import { Store } from "lucide-react";
 import { AdminSidebar } from "./AdminSidebar";
 import adminService from "@/services/admin.service";
 
@@ -175,11 +177,25 @@ export default function AdminLayout() {
               </div>
             </div>
 
-            {toastMsg && (
-              <div className="rounded-md border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-medium text-primary animate-in fade-in slide-in-from-top-2">
-                {toastMsg}
-              </div>
-            )}
+            <div className="flex items-center gap-3">
+              {toastMsg && (
+                <div className="rounded-md border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-medium text-primary animate-in fade-in slide-in-from-top-2">
+                  {toastMsg}
+                </div>
+              )}
+
+              <Button
+                variant="outline"
+                size="sm"
+                className="gap-2 border-border/80 bg-background/50 hover:bg-muted text-muted-foreground hover:text-foreground text-xs"
+                asChild
+              >
+                <Link to="/">
+                  <Store className="size-3.5 text-primary" />
+                  <span>Volver a la tienda</span>
+                </Link>
+              </Button>
+            </div>
           </header>
 
           {/* Contenido Dinámico de la Pestaña Activa conectado a la API */}

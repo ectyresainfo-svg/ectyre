@@ -1,3 +1,12 @@
+<!-- memoria-de-proyecto:inicio ruta=docs -->
+## Memoria del proyecto (léela primero)
+
+Antes de tu primera respuesta en cada sesión, lee **sin preguntar** `docs/STARTUP.md` y `docs/CURRENT.md`, y sigue `STARTUP.md`. Después responde con un resumen breve: dónde quedamos, la próxima acción y los pendientes de prioridad alta.
+
+Si no tienes la skill `memoria-de-proyecto` disponible, pide al usuario instalarla una vez con `npx skills add jzaruma1209/skills-privados-paul-zaruma --skill memoria-de-proyecto -a <nombre-de-tu-agente>` (no la instales tú sin permiso). Mientras tanto, sigue leyendo los archivos de arriba.
+<!-- memoria-de-proyecto:fin -->
+
+
 # AGENTS.md — ECTYRE Frontend
 
 ## Build / Lint / Test
@@ -81,6 +90,7 @@ npm run preview  # Preview production build
 - CSS files only for complex animations, print styles, or base resets
 - shadcn CSS variables defined in `src/index.css`
 - Utility: `cn()` from `@/lib/utils` (combines `clsx` + `tailwind-merge`)
+- **Fuentes: solo Inter (`font-sans`, texto general) y Space Grotesk (`font-display`, títulos/precios/botones).** No agregar ninguna otra fuente ni paquetes de fuentes; respaldo siempre `sans-serif`.
 
 ### Naming Conventions
 | Type | Convention | Example |

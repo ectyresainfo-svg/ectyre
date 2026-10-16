@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════════════
-   VehicleSearcher.css — Paleta Ectyre (blanco/negro/rojo)
-   Misma estructura visual que TireSearcher
+   VehicleSearcher.css — ESTILO EDITORIAL / RAS (SHARP EDGES)
+   Bordes rectos (border-radius: 0), tipografía Space Grotesk e Inter
    ═══════════════════════════════════════════════════ */
 
 .vehicle-searcher {
@@ -8,17 +8,18 @@
   max-width: 420px;
   margin: 0 auto;
   padding: 14px 12px 18px;
-  background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+  background: #FFFFFF;
+  border-radius: 0 !important;
+  border: 1px solid #E5E5E5;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.05);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
-  font-family: 'Inter', 'Outfit', Arial, sans-serif;
+  gap: 12px;
+  font-family: 'Inter', sans-serif;
 }
 
-/* ── Breadcrumb ─────────────────────────────── */
+/* ── Breadcrumb Ras ─────────────────────────── */
 .vs-breadcrumb {
   display: flex;
   align-items: center;
@@ -32,54 +33,58 @@
 }
 
 .vs-crumb {
-  background: #f5f5f5;
-  border: 1.5px solid #ddd;
-  color: #888;
-  border-radius: 8px;
-  font-size: 12px;
-  font-weight: 600;
+  background: #F5F5F5;
+  border: 1px solid #D5D5D5;
+  color: #666666;
+  border-radius: 0 !important;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
   padding: 5px 12px;
   cursor: default;
-  transition: all 0.2s;
+  transition: all 0.15s ease;
   max-width: 100px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  text-transform: uppercase;
 }
 
 .vs-crumb.done {
-  background: #1a1a1a;
-  border-color: #1a1a1a;
-  color: #fff;
+  background: #111111;
+  border-color: #111111;
+  color: #FFFFFF;
   cursor: pointer;
 }
 
 .vs-crumb.done:hover {
-  background: #333;
+  background: #333333;
 }
 
 .vs-crumb.active {
   background: #E60000;
   border-color: #E60000;
-  color: #fff;
+  color: #FFFFFF;
 }
 
 .vs-crumb:disabled {
-  opacity: 0.4;
+  opacity: 0.35;
   cursor: not-allowed;
 }
 
 .vs-crumb-arrow {
-  color: #bbb;
-  font-size: 16px;
+  color: #999999;
+  font-size: 14px;
   line-height: 1;
 }
 
 /* ── Título del paso ────────────────────────── */
 .vs-step-title {
-  font-size: 16px;
-  font-weight: 800;
-  color: #1a1a1a;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: #111111;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   text-align: center;
@@ -106,102 +111,109 @@
 }
 
 .vs-vehicle-label {
-  font-size: 13px;
-  color: #555;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 12px;
+  color: #555555;
   margin: 0;
   text-align: center;
-  background: #f5f5f5;
-  border-radius: 8px;
+  background: #F5F5F5;
+  border-radius: 0 !important;
+  border: 1px solid #E5E5E5;
   padding: 4px 14px;
 }
 
 .vs-vehicle-label strong {
-  color: #1a1a1a;
+  color: #111111;
 }
 
-/* ── Grid de botones ─────────────────────────── */
+/* ── Grid de botones Ras ─────────────────────────── */
 .vs-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 6px;
+  gap: 5px;
   width: 100%;
 }
 
-/* Para marcas y modelos (texto más largo) */
 .vs-grid--brands {
   grid-template-columns: repeat(2, 1fr);
 }
 
 .vs-btn {
-  background: #f5f5f5;
-  border: 1.5px solid #e0e0e0;
-  border-radius: 8px;
-  color: #1a1a1a;
-  font-size: 13px;
-  font-weight: 600;
+  background: #FFFFFF;
+  border: 1px solid #D5D5D5;
+  border-radius: 0 !important;
+  color: #111111;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
   padding: 9px 6px;
   cursor: pointer;
-  transition: all 0.15s;
+  transition: all 0.15s ease;
   text-align: center;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  letter-spacing: 0.02em;
 }
 
 .vs-btn:hover:not(:disabled) {
-  background: #1a1a1a;
-  color: #fff;
-  border-color: #1a1a1a;
-  transform: translateY(-1px);
+  background: #111111;
+  color: #FFFFFF;
+  border-color: #111111;
 }
 
 .vs-btn--active {
   background: #E60000 !important;
   border-color: #E60000 !important;
-  color: #fff !important;
+  color: #FFFFFF !important;
 }
 
 .vs-btn:disabled {
-  opacity: 0.5;
+  opacity: 0.35;
   cursor: not-allowed;
 }
 
-/* ── Ver Todos ──────────────────────────────── */
+/* ── Ver Todos Ras ──────────────────────────────── */
 .vs-show-all {
   width: 100%;
-  background: #1a1a1a;
-  color: #fff;
-  border: none;
-  border-radius: 10px;
-  padding: 11px 0;
-  font-size: 13px;
+  background: #111111;
+  color: #FFFFFF;
+  border: 1px solid #111111;
+  border-radius: 0 !important;
+  padding: 12px 0;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 12px;
   font-weight: 700;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: all 0.2s ease;
   text-transform: uppercase;
 }
 
 .vs-show-all:hover {
-  background: #333;
+  background: #000000;
+  border-color: #000000;
 }
 
 /* ── Reset ──────────────────────────────────── */
 .vs-reset {
   background: transparent;
-  border: 1.5px solid #ccc;
-  color: #888;
-  border-radius: 8px;
-  padding: 7px 18px;
-  font-size: 12px;
+  border: 1px solid #CCCCCC;
+  color: #666666;
+  border-radius: 0 !important;
+  padding: 6px 16px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 11px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .vs-reset:hover {
-  border-color: #1a1a1a;
-  color: #1a1a1a;
+  border-color: #111111;
+  color: #111111;
 }
 
 /* ── Estados ────────────────────────────────── */
@@ -209,10 +221,11 @@
   width: 100%;
   text-align: center;
   padding: 18px 12px;
-  border-radius: 12px;
-  background: #f5f5f5;
-  color: #555;
-  font-size: 14px;
+  border-radius: 0 !important;
+  border: 1px solid #E5E5E5;
+  background: #F9F9F9;
+  color: #555555;
+  font-size: 13px;
 }
 
 .vs-status p {
@@ -221,11 +234,11 @@
 
 .vs-spinner {
   margin: 0 auto 8px;
-  width: 30px;
-  height: 30px;
-  border: 3px solid #e0e0e0;
-  border-top-color: #E60000;
-  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  border: 2px solid #E5E5E5;
+  border-top-color: #111111;
+  border-radius: 0 !important;
   animation: vs-spin 0.7s linear infinite;
 }
 
@@ -234,18 +247,18 @@
 }
 
 .vs-status--error {
-  background: #fff0f0;
-  color: #c00;
-  border: 1px solid #ffcccc;
+  background: #FFF5F5;
+  color: #E60000;
+  border: 1px solid #FFE0E0;
 }
 
 .vs-status--empty {
-  background: #f8f8f8;
-  color: #666;
+  background: #F9F9F9;
+  color: #666666;
 }
 
 .vs-status--empty span {
-  font-size: 28px;
+  font-size: 26px;
   display: block;
   margin-bottom: 6px;
 }
@@ -253,67 +266,81 @@
 /* ── Resultados ─────────────────────────────── */
 .vs-results {
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
-.vs-results-title {
-  font-size: 14px;
+.vs-results-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #EEEEEE;
+  padding-bottom: 8px;
+}
+
+.vs-results-count {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 12px;
   font-weight: 700;
-  color: #1a1a1a;
-  margin: 0 0 12px;
-  text-align: center;
+  color: #111111;
 }
 
 .vs-results-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
 }
 
-.vs-result-card {
-  background: #fff;
-  border: 1px solid #e8e8e8;
-  border-radius: 12px;
-  padding: 12px;
+.vs-card {
+  background: #FFFFFF;
+  border: 1px solid #E5E5E5;
+  border-radius: 0 !important;
+  padding: 8px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 6px;
-  transition: box-shadow 0.2s, transform 0.2s;
+  transition: all 0.2s ease;
 }
 
-.vs-result-card:hover {
-  box-shadow: 0 4px 16px rgba(0,0,0,0.10);
-  transform: translateY(-2px);
-}
-
-.vs-card-logo {
-  height: 22px;
-  object-fit: contain;
+.vs-card:hover {
+  border-color: #111111;
 }
 
 .vs-card-img {
-  width: 100px;
-  height: 100px;
+  width: 70px;
+  height: 70px;
   object-fit: contain;
 }
 
-.vs-card-model {
-  font-size: 13px;
+.vs-card-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  width: 100%;
+}
+
+.vs-card-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 11px;
   font-weight: 700;
-  color: #1a1a1a;
+  color: #111111;
   text-align: center;
   margin: 0;
 }
 
 .vs-card-measure {
-  font-size: 11px;
-  color: #808080;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 10px;
+  color: #777777;
   margin: 0;
 }
 
 .vs-card-origin {
-  font-size: 10px;
-  color: #aaa;
+  font-size: 9px;
+  color: #999999;
   margin: 0;
 }
 
@@ -325,72 +352,57 @@
 }
 
 .vs-card-original {
-  font-size: 11px;
-  color: #aaa;
+  font-size: 10px;
+  color: #999999;
   text-decoration: line-through;
 }
 
 .vs-card-final {
-  font-size: 18px;
-  font-weight: 800;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
   color: #E60000;
 }
 
 .vs-card-stock {
-  font-size: 11px;
-  color: #3a9a3a;
+  font-size: 10px;
+  color: #27ae60;
   margin: 0;
   font-weight: 600;
 }
 
 .vs-card-stock--out {
-  color: #aaa;
+  color: #999999;
 }
 
 .vs-card-btn {
   width: 100%;
-  background: #1a1a1a;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  padding: 9px 0;
-  font-size: 12px;
+  background: #111111;
+  color: #FFFFFF;
+  border: 1px solid #111111;
+  border-radius: 0 !important;
+  padding: 8px 0;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 11px;
   font-weight: 700;
   cursor: pointer;
-  letter-spacing: 0.04em;
-  transition: background 0.2s;
+  letter-spacing: 0.05em;
+  transition: all 0.15s ease;
   text-transform: uppercase;
   margin-top: 2px;
 }
 
 .vs-card-btn:hover {
-  background: #E60000;
-}
-
-/* ── Responsive ─────────────────────────────── */
-@media (max-width: 480px) {
-  .vs-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  .vs-grid--brands {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .vehicle-searcher {
-    border-radius: 12px;
-    padding: 16px 12px 20px;
-  }
+  background: #000000;
 }
 
 /* ══════════════════════════════════════════════
-   MODAL — Popup flotante (resultados + ver todos)
+   MODAL — Popup flotante Ras
    ══════════════════════════════════════════════ */
-
 .vs-modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.55);
+  background: rgba(0, 0, 0, 0.65);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
   z-index: 9999;
@@ -407,21 +419,22 @@
 }
 
 .vs-modal {
-  background: #fff;
-  border-radius: 20px;
-  box-shadow: 0 24px 60px rgba(0,0,0,0.28);
+  background: #FFFFFF;
+  border-radius: 0 !important;
+  border: 1px solid #111111;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.3);
   width: 100%;
   max-width: 500px;
   max-height: 85vh;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  animation: vs-modal-in 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: vs-modal-in 0.2s ease;
 }
 
 @keyframes vs-modal-in {
-  from { transform: scale(0.92) translateY(12px); opacity: 0; }
-  to   { transform: scale(1)    translateY(0px);  opacity: 1; }
+  from { transform: translateY(8px); opacity: 0; }
+  to   { transform: translateY(0px);  opacity: 1; }
 }
 
 .vs-modal-header {
@@ -429,38 +442,39 @@
   align-items: center;
   justify-content: space-between;
   padding: 16px 20px 12px;
-  border-bottom: 1.5px solid #f0f0f0;
+  border-bottom: 1px solid #EEEEEE;
   flex-shrink: 0;
 }
 
 .vs-modal-title {
-  font-family: 'Inter', 'Outfit', Arial, sans-serif;
-  font-size: 14px;
-  font-weight: 800;
-  color: #1a1a1a;
-  letter-spacing: 0.03em;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: #111111;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
 }
 
 .vs-modal-close {
-  background: #f5f5f5;
-  border: none;
-  border-radius: 50%;
-  width: 32px;
-  height: 32px;
-  font-size: 14px;
-  color: #666;
+  background: #F5F5F5;
+  border: 1px solid #E5E5E5;
+  border-radius: 0 !important;
+  width: 28px;
+  height: 28px;
+  font-size: 13px;
+  color: #111111;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.15s, color 0.15s;
+  transition: all 0.15s ease;
   flex-shrink: 0;
 }
 
 .vs-modal-close:hover {
   background: #E60000;
-  color: #fff;
+  border-color: #E60000;
+  color: #FFFFFF;
 }
 
 .vs-modal-body {
@@ -473,7 +487,7 @@
 .vs-modal-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 8px;
+  gap: 6px;
 }
 
 @media (max-width: 400px) {

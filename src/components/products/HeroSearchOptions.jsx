@@ -1,63 +1,91 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { gsap } from "gsap";
 import ProductCard from "./ProductCard";
+import productsService from "../../services/products.service";
 
-// ── 12 productos destacados — edita estos datos cuando quieras ──
-const FEATURED_PRODUCTS = [
-  { id: "h1",  name: "Llanta Todo Terreno 265/70R16",   brand: "Trazano", measure: "265/70R16", price: 179.98, finalPrice:  89.99, discount: 50, image: "/llanta1.png" },
-  { id: "h2",  name: "Llanta Deportiva 225/45R17",       brand: "Trazano", measure: "225/45R17", price: 139.98, finalPrice:  69.99, discount: 50, image: "/llanta2.png" },
-  { id: "h3",  name: "Llanta Radial 195/65R15",          brand: "Trazano", measure: "195/65R15", price: 119.98, finalPrice:  59.99, discount: 50, image: "/llanta1.png" },
-  { id: "h4",  name: "Llanta 4x4 245/75R16",             brand: "Trazano", measure: "245/75R16", price: 199.98, finalPrice:  99.99, discount: 50, image: "/llanta2.png" },
-  { id: "h5",  name: "Llanta Nankang NS-20 205/55R16",   brand: "Nankang", measure: "205/55R16", price: 145.00, finalPrice:  89.99, discount: 38, image: "/llanta1.png" },
-  { id: "h6",  name: "Llanta Sportiva 235/40R18",        brand: "Nankang", measure: "235/40R18", price: 215.00, finalPrice: 115.00, discount: 47, image: "/llanta2.png" },
-  { id: "h7",  name: "Llanta Econex 175/70R13",          brand: "Nankang", measure: "175/70R13", price:  74.50, finalPrice:  49.99, discount: 33, image: "/llanta1.png" },
-  { id: "h8",  name: "Llanta Mudstar 285/75R16",         brand: "Nankang", measure: "285/75R16", price: 195.00, finalPrice: 145.00, discount: 26, image: "/llanta2.png" },
-  { id: "h9",  name: "Moqueta Delantera Universal",      brand: "Ectyre",  measure: "Universal", price:  39.99, finalPrice:  24.99, discount: 38, image: "/llanta1.png" },
-  { id: "h10", name: "Cono de Seguridad Naranja 75cm",   brand: "Ectyre",  measure: "75cm",      price:  18.50, finalPrice:  12.99, discount: 30, image: "/llanta2.png" },
-  { id: "h11", name: "Llanta Aro 13 Radial 155/80R13",   brand: "Trazano", measure: "155/80R13", price:  89.98, finalPrice:  49.99, discount: 44, image: "/llanta1.png" },
-  { id: "h12", name: "Llanta Aro 14 Touring 185/70R14",  brand: "Trazano", measure: "185/70R14", price: 109.98, finalPrice:  64.99, discount: 41, image: "/llanta2.png" },
-];
+import { buildFeaturedGroups } from "../../utils/featuredGroups";
 
-const CARDS_PER_PAGE = 4;
-const INTERVAL_MS    = 5000;
-const TOTAL_PAGES    = Math.ceil(FEATURED_PRODUCTS.length / CARDS_PER_PAGE);
+const INTERVAL_MS = 5000;
 
 const HeroSearchOptions = () => {
-  const [page, setPage]  = useState(0);
-  const gridRef          = useRef(null);
-  const isAnimating      = useRef(false);
+  const [productsList, setProductsList] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [groupIndex, setGroupIndex] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const gridRef = useRef(null);
+  const isAnimating = useRef(false);
 
-  const currentProducts = FEATURED_PRODUCTS.slice(
-    page * CARDS_PER_PAGE,
-    page * CARDS_PER_PAGE + CARDS_PER_PAGE
-  );
+  // Cargar el catálogo real para seleccionar destacados y completar los grupos.
+  useEffect(() => {
+    let isMounted = true;
+    const loadFeatured = async () => {
+      try {
+        const data = await productsService.getAllProducts();
+        if (isMounted) setProductsList(data || []);
+      } catch (err) {
+        console.error("Error cargando productos destacados:", err);
+        if (isMounted) setProductsList([]);
+      } finally {
+        if (isMounted) setLoading(false);
+      }
+    };
 
-  const goToPage = (nextPage, direction = 1) => {
-    if (isAnimating.current || !gridRef.current) return;
+    loadFeatured();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  // El sorteo ocurre solo al cambiar el catálogo, no en cada render o transición.
+  const groups = useMemo(() => buildFeaturedGroups(productsList), [productsList]);
+  const totalSteps = groups.length;
+  const visibleProducts = groups[groupIndex] || groups[0] || [];
+  const animado = totalSteps > 1;
+
+  // Transición suave GSAP (banner deslizante)
+  const goToIndex = (nextIndex, direction = 1) => {
+    if (isAnimating.current || !gridRef.current || !animado) return;
     isAnimating.current = true;
 
     const el = gridRef.current;
-    if (!el) return;
+    const cards = Array.from(el.querySelectorAll(".tire-card"));
 
-    const cards = Array.from(el.querySelectorAll(".product-card"));
+    // Nunca debe quedar trabado: si por lo que sea GSAP no llega a onComplete
+    // (0 cards encontradas, tab en segundo plano, etc.), esto libera el
+    // candado igual a los 1200ms como red de seguridad.
+    const liberar = () => {
+      isAnimating.current = false;
+    };
+    const seguro = setTimeout(liberar, 1200);
 
-    // Opcion C: Fade + Rotate leve (El viento se las lleva suavemente)
+    // Sin cards que animar (layout aún no listo): cambia el grupo directo,
+    // sin transición, y libera el candado de inmediato.
+    if (cards.length === 0) {
+      clearTimeout(seguro);
+      setGroupIndex(nextIndex);
+      liberar();
+      return;
+    }
+
     gsap.to(cards, {
-      y: -15,                           // Vuelan un poquitito hacia arriba
-      rotation: direction > 0 ? 8 : -8, // Giran levemente (2D, nada de 3D)
+      y: -15,
+      rotation: direction > 0 ? 8 : -8,
       scale: 0.95,
       autoAlpha: 0,
-      duration: 0.4,
-      stagger: 0.05,                    // Vuelan casi al mismo tiempo, muy sutil
+      duration: 0.35,
+      stagger: 0.04,
       ease: "power2.inOut",
       onComplete: () => {
-        setPage(nextPage);
+        setGroupIndex(nextIndex);
 
         setTimeout(() => {
-          const newCards = Array.from(gridRef.current?.querySelectorAll(".product-card") || []);
-          if (!newCards.length) return;
+          const newCards = Array.from(gridRef.current?.querySelectorAll(".tire-card") || []);
+          if (!newCards.length) {
+            clearTimeout(seguro);
+            liberar();
+            return;
+          }
 
-          // Vienen desde el ángulo opuesto giradas hacia el otro lado
           gsap.set(newCards, {
             y: 15,
             rotation: direction > 0 ? -8 : 8,
@@ -65,38 +93,44 @@ const HeroSearchOptions = () => {
             autoAlpha: 0,
           });
 
-          // Se acomodan suavemente a su posición recta original
           gsap.to(newCards, {
             y: 0,
             rotation: 0,
             scale: 1,
             autoAlpha: 1,
-            duration: 0.5,
-            stagger: 0.05,
-            ease: "back.out(1.2)", // Acomodo muy suave y balanceado
-            onComplete: () => { isAnimating.current = false; },
+            duration: 0.45,
+            stagger: 0.04,
+            ease: "back.out(1.2)",
+            onComplete: () => {
+              clearTimeout(seguro);
+              liberar();
+            },
           });
         }, 10);
       },
     });
-
   };
 
-  // Auto-avance cada 5 s
+  // Auto-carrusel cíclico cada 5s — se pausa al pasar el mouse por encima
   useEffect(() => {
-    const id = setInterval(() => {
-      const next = (page + 1) % TOTAL_PAGES;
-      goToPage(next, 1);
+    if (!animado || paused) return;
+    const timer = setInterval(() => {
+      const next = (groupIndex + 1) % totalSteps;
+      goToIndex(next, 1);
     }, INTERVAL_MS);
-    return () => clearInterval(id);
-  }, [page]); // eslint-disable-line react-hooks/exhaustive-deps
+
+    return () => clearInterval(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [groupIndex, totalSteps, animado, paused]);
 
   return (
     <div
-      className="hero-search-options relative rounded-2xl overflow-hidden h-full flex flex-col p-3"
+      className="hero-search-options relative rounded-none border border-white/10 overflow-hidden h-full flex flex-col p-3 font-sans"
       style={{ background: "rgba(17, 24, 39, 0.40)" }}
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
     >
-      {/* ── blobs decorativos (sin cambios) ── */}
+      {/* ── blobs decorativos ── */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute -left-10 top-1/2 -translate-y-1/2 -z-0 blur-3xl opacity-40"
@@ -113,41 +147,60 @@ const HeroSearchOptions = () => {
       </div>
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-white/10" />
 
-      {/* ── Header + indicadores de página ── */}
+      {/* ── Header + indicadores de carrusel ── */}
       <div className="flex items-center justify-between mb-3 relative z-10">
-        <span className="text-white/70 text-[10px] font-bold uppercase tracking-wider ml-1">
-          PRODUCTOS DESTACADOS:
+        <span className="text-white/80 text-[10px] font-bold uppercase tracking-widest ml-1 font-display">
+          PRODUCTOS DESTACADOS
         </span>
 
-        {/* Dots de navegación — rojo activo, semitransparente inactivo */}
-        <div className="flex gap-1.5 mr-1">
-          {Array.from({ length: TOTAL_PAGES }).map((_, i) => (
-            <button
-              key={i}
-              onClick={() => goToPage(i, i > page ? 1 : -1)}
-              aria-label={`Grupo ${i + 1}`}
-              style={{
-                width:           i === page ? "18px" : "7px",
-                height:          "7px",
-                borderRadius:    "9999px",
-                backgroundColor: i === page ? "#E60000" : "rgba(255,255,255,0.35)",
-                border:          "none",
-                cursor:          "pointer",
-                padding:         0,
-                transition:      "width 0.3s ease, background-color 0.3s ease",
-              }}
-            />
-          ))}
-        </div>
+        {/* Indicadores lineales ras */}
+        {animado && (
+          <div className="flex items-center gap-1.5 mr-1 max-w-[120px] overflow-hidden">
+            {Array.from({ length: totalSteps }).map((_, i) => (
+              <button
+                key={i}
+                onClick={() => goToIndex(i, i > groupIndex ? 1 : -1)}
+                aria-label={`Grupo de destacados ${i + 1}`}
+                style={{
+                  width: i === groupIndex ? "16px" : "6px",
+                  height: "3px",
+                  borderRadius: "0px",
+                  backgroundColor: i === groupIndex ? "#E60000" : "rgba(255,255,255,0.35)",
+                  border: "none",
+                  cursor: "pointer",
+                  padding: 0,
+                  transition: "width 0.3s ease, background-color 0.3s ease",
+                  flexShrink: 0,
+                }}
+              />
+            ))}
+          </div>
+        )}
       </div>
 
-      {/* ── Grid animado: Wave Flip ── */}
+      {/* ── Grid con ventana deslizante ── */}
       <div style={{ flex: 1, perspective: "1200px" }}>
-        <div ref={gridRef} className="grid grid-cols-2 gap-2 h-full relative z-10" style={{ transformStyle: "preserve-3d" }}>
-          {currentProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
+        {loading ? (
+          <div className="grid grid-cols-2 gap-2 h-full items-center justify-center">
+            <div className="col-span-2 text-center text-white/50 text-xs py-10 animate-pulse">
+              Cargando productos destacados...
+            </div>
+          </div>
+        ) : totalSteps === 0 ? (
+          <div className="flex h-full items-center justify-center py-10 text-center text-xs text-white/60">
+            Pronto encontrarás productos destacados aquí.
+          </div>
+        ) : (
+          <div
+            ref={gridRef}
+            className="grid grid-cols-2 content-center gap-2 h-full relative z-10"
+            style={{ transformStyle: "preserve-3d" }}
+          >
+            {visibleProducts.map((product, index) => (
+              <ProductCard key={`${groupIndex}-${product.id}-${index}`} product={product} compact />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

@@ -3,9 +3,10 @@ import apiCache from '../utils/apiCache';
 
 // ── TTLs de caché ─────────────────────────────────────
 const CACHE_TTL = {
-  ALL_PRODUCTS:   5 * 60 * 1000,  // 5 minutos — el catálogo no cambia frecuentemente
+  ALL_PRODUCTS:   30 * 1000,      // Reducido a 30 segundos temporalmente (antes 5 minutos)
   PRODUCT_DETAIL: 10 * 60 * 1000, // 10 minutos — detalle de un producto individual
   SEARCH_RESULTS: 2 * 60 * 1000,  // 2 minutos — resultados de búsqueda
+  FEATURED:       10 * 1000,      // 10 segundos para productos destacados
 };
 
 /**
@@ -35,7 +36,7 @@ const mapProducto = (p) => {
     brandLogo: p.marca?.logoUrl || null,
     brandBanner: p.marca?.bannerUrl || null,
     model: p.modelo?.nombre || null,
-    modelUse: p.modelo?.tipoUso || null, // { codigo: "AT", descripcion: "All Terrain" }
+    modelUse: p.modelo?.tipoUso || null, // { codigo: "AT", descripcion: "Todo Terreno" }
     measure: p.medidas?.texto || '',
     width: p.medidas?.ancho ?? null,
     height: p.medidas?.alto ?? null,
@@ -83,6 +84,14 @@ export const productsService = {
   getAllProducts: (params = {}) =>
     conCache(`all-products:${JSON.stringify(params)}`, CACHE_TTL.ALL_PRODUCTS, async () => {
       const response = await api.get('/productos', { params });
+      return mapProductos(response.data.data);
+    }),
+  /**
+   * Productos destacados para el Home — GET /productos?destacado=true
+   */
+  getFeaturedProducts: () =>
+    conCache('featured-products', CACHE_TTL.FEATURED, async () => {
+      const response = await api.get('/productos', { params: { destacado: true } });
       return mapProductos(response.data.data);
     }),
 

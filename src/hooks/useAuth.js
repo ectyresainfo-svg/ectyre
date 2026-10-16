@@ -28,18 +28,6 @@ export const useAuth = () => {
       dispatch(setAuthLoading(true));
       dispatch(clearAuthError());
 
-      // ─── LOGIN TEMPORAL ADMIN ───
-      // Credenciales: admin / admin
-      // TODO: Eliminar cuando el backend real tenga autenticación admin
-      if (email === 'admin' && password === 'admin') {
-        dispatch(setCredentials({
-          user: { id: 0, nombre: 'Administrador', email: 'admin@ectyre.com', role: 'admin' },
-          token: 'dev-admin-token',
-        }));
-        return { success: true, isAdmin: true };
-      }
-      // ─── FIN LOGIN TEMPORAL ───
-
       // authService.login() ya retorna response.data de axios
       // El backend responde: { success, message, data: { cliente, token } }
       const response = await authService.login(email, password);
@@ -50,7 +38,7 @@ export const useAuth = () => {
         token: newToken,
       }));
 
-      return { success: true };
+      return { success: true, isAdmin: cliente?.role === 'admin' };
     } catch (err) {
       const message =
         err.response?.data?.message ||

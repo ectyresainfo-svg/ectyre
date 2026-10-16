@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Plus, Tag, X } from "lucide-react";
+import { Pencil, Plus, Tag, X } from "lucide-react";
 import nivelesService, { mensajeError } from "@/services/niveles.service";
 import {
   AccionesTarjeta,
@@ -21,6 +21,7 @@ export function ModelosPanel({ modelos, marcas, tipos, tiposUso, recargar, notif
   const [guardando, setGuardando] = useState(false);
   const [error, setError] = useState(null);
   const [nuevoUso, setNuevoUso] = useState({ codigo: "", descripcion: "" });
+  const [editandoUso, setEditandoUso] = useState(null);
 
   // Solo marcas cuyo tipo de producto usa modelos (ej: Llantas)
   const tiposConModelo = useMemo(
@@ -83,22 +84,36 @@ export function ModelosPanel({ modelos, marcas, tipos, tiposUso, recargar, notif
     }
   };
 
-  const crearTipoUso = async (e) => {
+  const guardarTipoUso = async (e) => {
     e.preventDefault();
     if (!nuevoUso.codigo.trim() || !nuevoUso.descripcion.trim()) return;
     try {
-      await nivelesService.crearTipoUso(nuevoUso);
+      if (editandoUso) {
+        await nivelesService.actualizarTipoUso(editandoUso.idTipoUso, nuevoUso);
+        setEditandoUso(null);
+        notificar("Tipo de uso actualizado");
+      } else {
+        await nivelesService.crearTipoUso(nuevoUso);
+        notificar("Tipo de uso creado");
+      }
       setNuevoUso({ codigo: "", descripcion: "" });
-      notificar("Tipo de uso creado");
       await recargar();
     } catch (err) {
-      alert(mensajeError(err, "No se pudo crear el tipo de uso"));
+      alert(mensajeError(err, editandoUso ? "No se pudo actualizar el tipo de uso" : "No se pudo crear el tipo de uso"));
     }
+  };
+
+  const cancelarEdicionUso = () => {
+    setEditandoUso(null);
+    setNuevoUso({ codigo: "", descripcion: "" });
   };
 
   const eliminarTipoUso = async (tipoUso) => {
     if (!window.confirm(`¿Eliminar el tipo de uso "${tipoUso.codigo} - ${tipoUso.descripcion}"?`)) return;
     try {
+      if (editandoUso?.idTipoUso === tipoUso.idTipoUso) {
+        cancelarEdicionUso();
+      }
       await nivelesService.eliminarTipoUso(tipoUso.idTipoUso);
       notificar("Tipo de uso eliminado");
       await recargar();
@@ -147,14 +162,29 @@ export function ModelosPanel({ modelos, marcas, tipos, tiposUso, recargar, notif
           {tiposUso.map((t) => (
             <span
               key={t.idTipoUso}
-              className="inline-flex items-center gap-1 rounded-md border border-border bg-muted/40 pl-2 pr-1 py-0.5 text-[11px] text-foreground"
+              className={`inline-flex items-center gap-1 rounded-md border ${
+                editandoUso?.idTipoUso === t.idTipoUso
+                  ? "border-primary bg-primary/10 ring-1 ring-primary/40"
+                  : "border-border bg-muted/40"
+              } pl-2 pr-1 py-0.5 text-[11px] text-foreground transition-colors`}
             >
               <span className="font-mono font-bold text-primary">{t.codigo}</span>
               <span>{t.descripcion}</span>
               <button
                 type="button"
+                onClick={() => {
+                  setEditandoUso(t);
+                  setNuevoUso({ codigo: t.codigo, descripcion: t.descripcion });
+                }}
+                className="rounded p-0.5 text-muted-foreground hover:text-primary cursor-pointer transition-colors"
+                title="Editar"
+              >
+                <Pencil className="size-3" />
+              </button>
+              <button
+                type="button"
                 onClick={() => eliminarTipoUso(t)}
-                className="rounded p-0.5 text-muted-foreground hover:text-destructive cursor-pointer"
+                className="rounded p-0.5 text-muted-foreground hover:text-destructive cursor-pointer transition-colors"
                 title="Eliminar"
               >
                 <X className="size-3" />
@@ -162,7 +192,7 @@ export function ModelosPanel({ modelos, marcas, tipos, tiposUso, recargar, notif
             </span>
           ))}
         </div>
-        <form onSubmit={crearTipoUso} className="flex flex-wrap items-center gap-2">
+        <form onSubmit={guardarTipoUso} className="flex flex-wrap items-center gap-2">
           <input
             value={nuevoUso.codigo}
             onChange={(e) => setNuevoUso({ ...nuevoUso, codigo: e.target.value.toUpperCase().slice(0, 5) })}
@@ -179,8 +209,21 @@ export function ModelosPanel({ modelos, marcas, tipos, tiposUso, recargar, notif
             type="submit"
             className="inline-flex h-9 items-center gap-1 rounded-lg border border-primary/30 bg-primary/10 px-3 text-xs font-semibold text-primary hover:bg-primary hover:text-primary-foreground transition-colors cursor-pointer"
           >
-            <Plus className="size-3.5" /> Agregar
+            {editandoUso ? "Guardar cambios" : (
+              <>
+                <Plus className="size-3.5" /> Agregar
+              </>
+            )}
           </button>
+          {editandoUso && (
+            <button
+              type="button"
+              onClick={cancelarEdicionUso}
+              className="inline-flex h-9 items-center gap-1 rounded-lg border border-border bg-muted/40 px-3 text-xs font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors cursor-pointer"
+            >
+              Cancelar
+            </button>
+          )}
         </form>
       </div>
 

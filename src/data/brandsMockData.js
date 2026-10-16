@@ -11,7 +11,7 @@ const TYRE_PLACEHOLDER = "";
 
 // Logo genérico SVG para las marcas (texto + color de fondo)
 const makeLogo = (text, bg, fg = "%23fff") =>
-  `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='50'%3E%3Crect width='160' height='50' rx='8' fill='${bg}'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-size='20' font-weight='bold' font-family='Arial' fill='${fg}'%3E${text}%3C/text%3E%3C/svg%3E`;
+  `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='50'%3E%3Crect width='160' height='50' rx='8' fill='${bg}'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-size='20' font-weight='bold' font-family='Inter, sans-serif' fill='${fg}'%3E${text}%3C/text%3E%3C/svg%3E`;
 
 // ─────────────────────────────────────────────────────────────────────────────
 // MARCAS

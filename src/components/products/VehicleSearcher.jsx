@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import vehicleData from '../../data/vehicle-data.json';
 import productsService from '../../services/products.service';
+import ExpandableValuesButton from './ExpandableValuesButton';
 import './VehicleSearcher.css';
 
 const STEPS = ['marca', 'anio', 'modelo'];
@@ -42,7 +43,6 @@ const VehicleSearcher = () => {
   const [loading,        setLoading]        = useState(false);
   const [searched,       setSearched]       = useState(false);
   const [error,          setError]          = useState(null);
-  const [showAllModal,    setShowAllModal]   = useState(false);
   const [showResultModal, setShowResultModal]= useState(false);
 
   const modelosDisponibles = marca
@@ -105,7 +105,6 @@ const VehicleSearcher = () => {
     setResults([]);
     setSearched(false);
     setError(null);
-    setShowAllModal(false);
     setShowResultModal(false);
   };
 
@@ -117,7 +116,6 @@ const VehicleSearcher = () => {
       if (idx === 1) { setModelo(null); }
       setResults([]);
       setSearched(false);
-      setShowAllModal(false);
       setShowResultModal(false);
     }
   };
@@ -180,39 +178,31 @@ const VehicleSearcher = () => {
           ))}
         </div>
 
-        {/* Botón VER TODOS — visible si hay más de 4 opciones */}
+        {/* Botón VER TODOS — visible si hay más de 4 opciones; se expande en el modal */}
         {currentOptions.length > 4 && (
-          <button data-slot="vs-show-all" className="vs-show-all" onClick={() => setShowAllModal(true)}>
-            VER TODOS LOS VALORES ▼
-          </button>
+          <ExpandableValuesButton prefix="vs" label="VER TODOS LOS VALORES ▼" title={STEP_LABELS[STEPS[step]]}>
+            {(cerrar) => (
+              <div className="vs-modal-grid">
+                {currentOptions.map((valor) => (
+                  <button
+                    data-slot="vs-grid-btn"
+                    key={valor}
+                    className={`vs-btn ${currentSelected === valor ? 'vs-btn--active' : ''}`}
+                    onClick={() => {
+                      cerrar();
+                      handleSelect(valor);
+                    }}
+                  >
+                    {valor}
+                  </button>
+                ))}
+              </div>
+            )}
+          </ExpandableValuesButton>
         )}
 
 
       </div>
-
-      {/* ── Modal: VER TODOS ────────────────────────── */}
-      {showAllModal && (
-        <VsModal
-          title={STEP_LABELS[STEPS[step]]}
-          onClose={() => setShowAllModal(false)}
-        >
-          <div className="vs-modal-grid">
-            {currentOptions.map((valor) => (
-              <button
-                data-slot="vs-grid-btn"
-                key={valor}
-                className={`vs-btn ${currentSelected === valor ? 'vs-btn--active' : ''}`}
-                onClick={() => {
-                  setShowAllModal(false);
-                  handleSelect(valor);
-                }}
-              >
-                {valor}
-              </button>
-            ))}
-          </div>
-        </VsModal>
-      )}
 
       {/* ── Modal: Resultados ───────────────────────── */}
       {showResultModal && (

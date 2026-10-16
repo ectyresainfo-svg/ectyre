@@ -14,8 +14,9 @@ import { STORAGE_KEYS } from '../constants';
 const getOrCreateSesionId = () => {
   let sesionId = localStorage.getItem(STORAGE_KEYS.SESSION_ID);
   if (!sesionId) {
-    // UUID simple suficiente para identificar la sesión del invitado
-    sesionId = 'sess_' + Math.random().toString(36).substring(2) + Date.now().toString(36);
+    // UUID criptográficamente aleatorio: un sesionId adivinable expondría
+    // el carrito de otro invitado (no requiere contraseña, solo este id).
+    sesionId = 'sess_' + crypto.randomUUID();
     localStorage.setItem(STORAGE_KEYS.SESSION_ID, sesionId);
   }
   return sesionId;

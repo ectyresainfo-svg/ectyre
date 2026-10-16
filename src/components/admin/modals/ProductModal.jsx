@@ -33,7 +33,7 @@ const OPCIONES = [
   { campo: "envioGratis", label: "Aplica Envío Gratis" },
   { campo: "aplicaDevoluciones", label: "Aplica Devoluciones" },
   { campo: "aplicaGarantia", label: "Aplica Garantía" },
-  { campo: "destacado", label: "Destacado en Home" },
+  { campo: "destacado", label: "Mostrar en productos destacados" },
 ];
 
 const inputClass =
@@ -166,7 +166,7 @@ export function ProductModal({ isOpen, onClose, onSaved, productToEdit }) {
     form.idAncho && form.idAlto && form.idAro
       ? `${valorMedida(niveles.anchos, "idAncho", form.idAncho)}/${valorMedida(niveles.altos, "idAlto", form.idAlto)}R${valorMedida(niveles.aros, "idAro", form.idAro)}`
       : "";
-  const nombreSugerido = [marca?.nombre, requiereModeloMedidas ? modelo?.nombre : null, medidaTexto].filter(Boolean).join(" ");
+  const nombreSugerido = [medidaTexto, marca?.nombre, requiereModeloMedidas ? modelo?.nombre : null].filter(Boolean).join(" ");
 
   const precio = aNumero(form.precio);
   const precioAnterior = aNumero(form.precioAnterior);

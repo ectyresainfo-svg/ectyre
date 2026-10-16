@@ -60,8 +60,10 @@ export default {
         sm: "calc(var(--radius) - 4px)",
       },
       fontFamily: {
-        sans: ["var(--font-sans)", "system-ui", "sans-serif"],
-        heading: ["var(--font-heading)", "system-ui", "sans-serif"],
+        sans:    ["Inter", "sans-serif"],
+        serif:   ["Inter", "sans-serif"], // sin fuentes con serifa: solo Inter y Space Grotesk
+        display: ["'Space Grotesk'", "sans-serif"],
+        mono:    ["'Space Grotesk'", "sans-serif"],
       },
     },
   },

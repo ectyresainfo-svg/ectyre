@@ -1,5 +1,6 @@
 /* ═══════════════════════════════════════════════════
-   TireSearcher.css — Paleta Ectyre (blanco/negro/rojo)
+   TireSearcher.css — ESTILO EDITORIAL / RAS (SHARP EDGES)
+   Bordes rectos (border-radius: 0), tipografía de precisión (Space Grotesk e Inter)
    ═══════════════════════════════════════════════════ */
 
 .tire-searcher {
@@ -7,17 +8,18 @@
   max-width: 420px;
   margin: 0 auto;
   padding: 14px 12px 18px;
-  background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.10);
+  background: #FFFFFF;
+  border-radius: 0 !important;
+  border: 1px solid #E5E5E5;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
-  font-family: 'Inter', 'Outfit', Arial, sans-serif;
+  gap: 12px;
+  font-family: 'Inter', sans-serif;
 }
 
-/* ── Breadcrumb ─────────────────────────────── */
+/* ── Breadcrumb Ras ─────────────────────────── */
 .ts-breadcrumb {
   display: flex;
   align-items: center;
@@ -31,32 +33,35 @@
 }
 
 .ts-crumb {
-  background: #f5f5f5;
-  border: 1.5px solid #ddd;
-  color: #888;
-  border-radius: 8px;
-  font-size: 12px;
-  font-weight: 600;
+  background: #F5F5F5;
+  border: 1px solid #D5D5D5;
+  color: #666666;
+  border-radius: 0 !important;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
   padding: 5px 12px;
   cursor: default;
-  transition: all 0.2s;
+  transition: all 0.15s ease;
+  text-transform: uppercase;
 }
 
 .ts-crumb.done {
-  background: #1a1a1a;
-  border-color: #1a1a1a;
-  color: #fff;
+  background: #111111;
+  border-color: #111111;
+  color: #FFFFFF;
   cursor: pointer;
 }
 
 .ts-crumb.done:hover {
-  background: #333;
+  background: #333333;
 }
 
 .ts-crumb.active {
   background: #E60000;
   border-color: #E60000;
-  color: #fff;
+  color: #FFFFFF;
 }
 
 .ts-crumb:disabled {
@@ -65,16 +70,17 @@
 }
 
 .ts-crumb-arrow {
-  color: #bbb;
-  font-size: 16px;
+  color: #999999;
+  font-size: 14px;
   line-height: 1;
 }
 
 /* ── Título del paso ────────────────────────── */
 .ts-step-title {
-  font-size: 16px;
-  font-weight: 800;
-  color: #1a1a1a;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: #111111;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   text-align: center;
@@ -101,7 +107,6 @@
   height: 90px;
   object-fit: contain;
   display: block;
-  /* Sin filtros y opacidad completa */
   filter: none !important;
   opacity: 1 !important;
 }
@@ -109,12 +114,10 @@
 .ts-measure-arc-wrapper {
   position: absolute;
   top: -21px;
-  /* Subido más para que el texto corone la parte de goma negra */
   left: 50%;
   transform: translateX(-50%);
   z-index: 5;
   pointer-events: none;
-  /* Sombra para que las letras blancas resalten sobre la goma negra */
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.8));
 }
 
@@ -122,81 +125,86 @@
   display: block;
 }
 
-/* ── Grid de botones ─────────────────────── */
+/* ── Grid de botones de medidas Ras ─────────────────────── */
 .ts-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 6px;
+  gap: 5px;
   width: 100%;
 }
 
 .ts-btn {
-  background: #f5f5f5;
-  border: 1.5px solid #e0e0e0;
-  border-radius: 8px;
-  color: #1a1a1a;
-  font-size: 13px;
-  font-weight: 600;
-  padding: 8px 4px;
+  background: #FFFFFF;
+  border: 1px solid #D5D5D5;
+  border-radius: 0 !important;
+  color: #111111;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 8px 2px;
   cursor: pointer;
-  transition: all 0.15s;
+  transition: all 0.15s ease;
   text-align: center;
 }
 
 .ts-btn:hover:not(:disabled) {
-  background: #1a1a1a;
-  color: #fff;
-  border-color: #1a1a1a;
-  transform: translateY(-1px);
+  background: #111111;
+  color: #FFFFFF;
+  border-color: #111111;
 }
 
 .ts-btn--active {
   background: #E60000 !important;
   border-color: #E60000 !important;
-  color: #fff !important;
+  color: #FFFFFF !important;
 }
 
 .ts-btn:disabled {
-  opacity: 0.5;
+  opacity: 0.35;
   cursor: not-allowed;
 }
 
-/* ── Ver Todos ──────────────────────────────── */
+/* ── Ver Todos Ras ──────────────────────────────── */
 .ts-show-all {
   width: 100%;
-  background: #1a1a1a;
-  color: #fff;
-  border: none;
-  border-radius: 10px;
-  padding: 11px 0;
-  font-size: 13px;
+  background: #111111;
+  color: #FFFFFF;
+  border: 1px solid #111111;
+  border-radius: 0 !important;
+  padding: 12px 0;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 12px;
   font-weight: 700;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: all 0.2s ease;
   text-transform: uppercase;
 }
 
 .ts-show-all:hover {
-  background: #333;
+  background: #000000;
+  border-color: #000000;
 }
 
 /* ── Reset ──────────────────────────────────── */
 .ts-reset {
   background: transparent;
-  border: 1.5px solid #ccc;
-  color: #888;
-  border-radius: 8px;
-  padding: 7px 18px;
-  font-size: 12px;
+  border: 1px solid #CCCCCC;
+  color: #666666;
+  border-radius: 0 !important;
+  padding: 6px 16px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 11px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .ts-reset:hover {
-  border-color: #1a1a1a;
-  color: #1a1a1a;
+  border-color: #111111;
+  color: #111111;
 }
 
 /* ── Estados ────────────────────────────────── */
@@ -204,10 +212,11 @@
   width: 100%;
   text-align: center;
   padding: 18px 12px;
-  border-radius: 12px;
-  background: #f5f5f5;
-  color: #555;
-  font-size: 14px;
+  border-radius: 0 !important;
+  border: 1px solid #E5E5E5;
+  background: #F9F9F9;
+  color: #555555;
+  font-size: 13px;
 }
 
 .ts-status p {
@@ -216,11 +225,11 @@
 
 .ts-spinner {
   margin: 0 auto 8px;
-  width: 30px;
-  height: 30px;
-  border: 3px solid #e0e0e0;
-  border-top-color: #E60000;
-  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  border: 2px solid #E5E5E5;
+  border-top-color: #111111;
+  border-radius: 0 !important;
   animation: ts-spin 0.7s linear infinite;
 }
 
@@ -231,18 +240,18 @@
 }
 
 .ts-status--error {
-  background: #fff0f0;
-  color: #c00;
-  border: 1px solid #ffcccc;
+  background: #FFF5F5;
+  color: #E60000;
+  border: 1px solid #FFE0E0;
 }
 
 .ts-status--empty {
-  background: #f8f8f8;
-  color: #666;
+  background: #F9F9F9;
+  color: #666666;
 }
 
 .ts-status--empty span {
-  font-size: 28px;
+  font-size: 26px;
   display: block;
   margin-bottom: 6px;
 }
@@ -250,67 +259,81 @@
 /* ── Resultados ─────────────────────────────── */
 .ts-results {
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
-.ts-results-title {
-  font-size: 14px;
+.ts-results-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #EEEEEE;
+  padding-bottom: 8px;
+}
+
+.ts-results-count {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 12px;
   font-weight: 700;
-  color: #1a1a1a;
-  margin: 0 0 12px;
-  text-align: center;
+  color: #111111;
 }
 
 .ts-results-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
 }
 
-.ts-result-card {
-  background: #fff;
-  border: 1px solid #e8e8e8;
-  border-radius: 12px;
-  padding: 12px;
+.ts-card {
+  background: #FFFFFF;
+  border: 1px solid #E5E5E5;
+  border-radius: 0 !important;
+  padding: 8px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 6px;
-  transition: box-shadow 0.2s, transform 0.2s;
+  transition: all 0.2s ease;
 }
 
-.ts-result-card:hover {
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.10);
-  transform: translateY(-2px);
-}
-
-.ts-card-logo {
-  height: 22px;
-  object-fit: contain;
+.ts-card:hover {
+  border-color: #111111;
 }
 
 .ts-card-img {
-  width: 100px;
-  height: 100px;
+  width: 70px;
+  height: 70px;
   object-fit: contain;
 }
 
-.ts-card-model {
-  font-size: 13px;
+.ts-card-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  width: 100%;
+}
+
+.ts-card-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 11px;
   font-weight: 700;
-  color: #1a1a1a;
+  color: #111111;
   text-align: center;
   margin: 0;
 }
 
 .ts-card-measure {
-  font-size: 11px;
-  color: #808080;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 10px;
+  color: #777777;
   margin: 0;
 }
 
 .ts-card-origin {
-  font-size: 10px;
-  color: #aaa;
+  font-size: 9px;
+  color: #999999;
   margin: 0;
 }
 
@@ -322,68 +345,57 @@
 }
 
 .ts-card-original {
-  font-size: 11px;
-  color: #aaa;
+  font-size: 10px;
+  color: #999999;
   text-decoration: line-through;
 }
 
 .ts-card-final {
-  font-size: 18px;
-  font-weight: 800;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
   color: #E60000;
 }
 
 .ts-card-stock {
-  font-size: 11px;
-  color: #3a9a3a;
+  font-size: 10px;
+  color: #27ae60;
   margin: 0;
   font-weight: 600;
 }
 
 .ts-card-stock--out {
-  color: #aaa;
+  color: #999999;
 }
 
 .ts-card-btn {
   width: 100%;
-  background: #1a1a1a;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  padding: 9px 0;
-  font-size: 12px;
+  background: #111111;
+  color: #FFFFFF;
+  border: 1px solid #111111;
+  border-radius: 0 !important;
+  padding: 8px 0;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 11px;
   font-weight: 700;
   cursor: pointer;
-  letter-spacing: 0.04em;
-  transition: background 0.2s;
+  letter-spacing: 0.05em;
+  transition: all 0.15s ease;
   text-transform: uppercase;
   margin-top: 2px;
 }
 
 .ts-card-btn:hover {
-  background: #E60000;
-}
-
-/* ── Responsive ─────────────────────────────── */
-@media (max-width: 480px) {
-  .ts-grid {
-    grid-template-columns: repeat(5, 1fr);
-  }
-
-  .tire-searcher {
-    border-radius: 12px;
-    padding: 16px 12px 20px;
-  }
+  background: #000000;
 }
 
 /* ══════════════════════════════════════════════
-   MODAL — Popup flotante (resultados + ver todos)
+   MODAL — Popup flotante Ras
    ══════════════════════════════════════════════ */
-
 .ts-modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.55);
+  background: rgba(0, 0, 0, 0.65);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
   z-index: 9999;
@@ -400,21 +412,22 @@
 }
 
 .ts-modal {
-  background: #fff;
-  border-radius: 20px;
-  box-shadow: 0 24px 60px rgba(0,0,0,0.28);
+  background: #FFFFFF;
+  border-radius: 0 !important;
+  border: 1px solid #111111;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.3);
   width: 100%;
   max-width: 500px;
   max-height: 85vh;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  animation: ts-modal-in 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: ts-modal-in 0.2s ease;
 }
 
 @keyframes ts-modal-in {
-  from { transform: scale(0.92) translateY(12px); opacity: 0; }
-  to   { transform: scale(1)    translateY(0px);  opacity: 1; }
+  from { transform: translateY(8px); opacity: 0; }
+  to   { transform: translateY(0px);  opacity: 1; }
 }
 
 .ts-modal-header {
@@ -422,38 +435,39 @@
   align-items: center;
   justify-content: space-between;
   padding: 16px 20px 12px;
-  border-bottom: 1.5px solid #f0f0f0;
+  border-bottom: 1px solid #EEEEEE;
   flex-shrink: 0;
 }
 
 .ts-modal-title {
-  font-family: 'Inter', 'Outfit', Arial, sans-serif;
-  font-size: 14px;
-  font-weight: 800;
-  color: #1a1a1a;
-  letter-spacing: 0.03em;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: #111111;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
 }
 
 .ts-modal-close {
-  background: #f5f5f5;
-  border: none;
-  border-radius: 50%;
-  width: 32px;
-  height: 32px;
-  font-size: 14px;
-  color: #666;
+  background: #F5F5F5;
+  border: 1px solid #E5E5E5;
+  border-radius: 0 !important;
+  width: 28px;
+  height: 28px;
+  font-size: 13px;
+  color: #111111;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.15s, color 0.15s;
+  transition: all 0.15s ease;
   flex-shrink: 0;
 }
 
 .ts-modal-close:hover {
   background: #E60000;
-  color: #fff;
+  border-color: #E60000;
+  color: #FFFFFF;
 }
 
 .ts-modal-body {
@@ -462,11 +476,11 @@
   flex: 1;
 }
 
-/* Grid inside modal (VER TODOS) */
+/* Grid dentro del modal */
 .ts-modal-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 8px;
+  gap: 6px;
 }
 
 @media (max-width: 400px) {

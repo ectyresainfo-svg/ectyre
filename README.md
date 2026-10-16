@@ -99,7 +99,7 @@ src/
 | Iconos | Lucide + Heroicons + React Icons |
 | Mapas | Leaflet + react-leaflet |
 | Animaciones | GSAP |
-| Fuentes | Inter + Geist Variable |
+| Fuentes | Inter + Space Grotesk (Google Fonts) |
 | Minificación | Terser (drop console, target es2015) |
 | Compresión | Gzip + Brotli (vite-plugin-compression) |
 | Code Splitting | 6 chunks: react, redux, maps, gsap, axios, icons |
